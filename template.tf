@@ -464,7 +464,7 @@ resource "azurerm_lb_rule" "LB-WebFrondEndrule" {
 
 resource "azurerm_managed_disk" "WebFrontEndManagedDisk" {
 
-    count                   = 2
+    count                   = 3
     name                    = "WebFrontEnd-${count.index + 1}-Datadisk"
     location                = "${var.AzureRegion}"
     resource_group_name     = "${azurerm_resource_group.RSG-BasicLinux.name}"
@@ -527,7 +527,7 @@ resource "azurerm_managed_disk" "BastionManagedDisk" {
 
 resource "azurerm_network_interface" "WebFrontEndNIC" {
 
-    count                   = 2
+    count                   = 3
     name                    = "WebFrontEnd${count.index +1}-NIC"
     location                = "${var.AzureRegion}"
     resource_group_name     = "${azurerm_resource_group.RSG-BasicLinux.name}"
@@ -650,7 +650,7 @@ resource "azurerm_availability_set" "BasicLinuxBastion-AS" {
 
 resource "azurerm_virtual_machine" "BasicLinuxWebFrontEndVM" {
 
-    count                   = 2
+    count                   = 3
     name                    = "BasicLinuxWebFrontEnd${count.index +1}"
     location                = "${var.AzureRegion}"
     resource_group_name     = "${azurerm_resource_group.RSG-BasicLinux.name}"
