@@ -2,4 +2,5 @@ AzureDFProvider.tf
 variables.tf
 terraform.tfstate
 terraform.tfstate.backup
+*.tfstate*
 .terraform/
