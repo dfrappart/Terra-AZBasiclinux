@@ -877,7 +877,7 @@ resource "azurerm_virtual_machine" "BasicLinuxBastionVM" {
 
 resource "azurerm_virtual_machine_extension" "CustomExtension-basicLinuxBastion" {
   count                = 1
-  name                 = "CustomExtensionBastion"
+  name                 = "CustomExtensionBastion-${count.index +1}"
   location             = "${var.AzureRegion}"
   resource_group_name  = "${azurerm_resource_group.RSG-BasicLinux.name}"
   virtual_machine_name = "BasicLinuxBastion${count.index +1}"
@@ -905,7 +905,7 @@ SETTINGS
 resource "azurerm_virtual_machine_extension" "CustomExtension-basicLinuxFrontEnd" {
   
   count                = 3
-  name                 = "CustomExtensionBastion"
+  name                 = "CustomExtensionFrontEnd-${count.index +1}"
   location             = "${var.AzureRegion}"
   resource_group_name  = "${azurerm_resource_group.RSG-BasicLinux.name}"
   virtual_machine_name = "BasicLinuxWebFrontEnd${count.index +1}"
@@ -925,4 +925,27 @@ SETTINGS
     environment = "${var.TagEnvironment}"
     usage       = "${var.TagUsage}"
   }
+}
+
+
+#####################################################################################
+# Output
+#####################################################################################
+
+
+
+output "IP Publique du Bastion" {
+  value = "${azurerm_public_ip.PublicIP-BastionBasicLinux.ip_address}"
+}
+
+output "FQDN du Bastion" {
+  value = "${azurerm_public_ip.PublicIP-BastionBasicLinux.fqdn}"
+}
+
+output "IP Publique du Web load balancer" {
+  value = "${azurerm_public_ip.PublicIP-FrontEndBasicLinux.ip_address}"
+}
+
+output "FQDN du Web Load Balancer" {
+  value = "${azurerm_public_ip.PublicIP-FrontEndBasicLinux.fqdn}"
 }
