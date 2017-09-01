@@ -85,91 +85,106 @@ resource "azurerm_network_security_group" "NSG-Subnet-BasicLinuxFrontEnd" {
     location = "${var.AzureRegion}"
     resource_group_name = "${azurerm_resource_group.RSG-BasicLinux.name}"
 
+}
+
+
     #############################################
     # Rules Section
     #############################################
 
     # Rule for incoming HTTP from internet
 
-    security_rule {
+resource "azurerm_network_security_rule" "AlltoFrontEnd-OK-HTTPIN" {
 
-    name                       = "OK-http-Inbound"
-    priority                   = 1100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "TCP"
-    source_port_range          = "*"
-    destination_port_range     = "80"
-    source_address_prefix      = "INTERNET"
-    destination_address_prefix = "10.0.0.0/24"
-        
-    }
-
-    # Rule for incoming HTTPS from internet
+    name                        = "OK-http-Inbound"
+    priority                    = 1100
+    direction                   = "Inbound"
+    access                      = "Allow"
+    protocol                    = "TCP"
+    source_port_range           = "*"
+    destination_port_range      = "80"
+    source_address_prefix       = "*"
+    destination_address_prefix  = "10.0.0.0/24"
+    resource_group_name         = "${azurerm_resource_group.RSG-BasicLinux.name}"
+    network_security_group_name = "${azurerm_network_security_group.NSG-Subnet-BasicLinuxFrontEnd.name}"
     
-    security_rule {
+}
+    
+    # Rule for incoming HTTPS from internet
 
-    name                       = "OK-https-Inbound"
-    priority                   = 1101
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "TCP"
-    source_port_range          = "*"
-    destination_port_range     = "443"
-    source_address_prefix      = "INTERNET"
-    destination_address_prefix = "10.0.0.0/24"
-    }
+resource "azurerm_network_security_rule" "AlltoFrontEnd-OK-HTTPSIN" {
 
-    # Rule for AZure Load Balancer
+    name                        = "AlltoFrontEnd-OK-HTTPSIN"
+    priority                    = 1101
+    direction                   = "Inbound"
+    access                      = "Allow"
+    protocol                    = "TCP"
+    source_port_range           = "*"
+    destination_port_range      = "443"
+    source_address_prefix       = "*"
+    destination_address_prefix  = "10.0.0.0/24"
+    resource_group_name         = "${azurerm_resource_group.RSG-BasicLinux.name}"
+    network_security_group_name = "${azurerm_network_security_group.NSG-Subnet-BasicLinuxFrontEnd.name}"  
 
-    security_rule {
+}   
 
-    name                       = "OK-AzureLB-Inbound"
-    priority                   = 1102
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "AZURELOADBALANCER"
-    destination_address_prefix = "10.0.0.0/24"
-
-    }
 
     # Rule for incoming SSH from Bastion
 
-    security_rule {
+resource "azurerm_network_security_rule" "BastiontoFrontEnd-OK-SSHIN" {
 
-    name                       = "OK-BastionSubnet-Inbound"
-    priority                   = 1103
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "TCP"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "10.0.2.0/24"
-    destination_address_prefix = "10.0.0.0/24"
+    name                        = "BastiontoFrontEnd-OK-SSHIN"
+    priority                    = 1102
+    direction                   = "Inbound"
+    access                      = "Allow"
+    protocol                    = "TCP"
+    source_port_range           = "*"
+    destination_port_range      = "22"
+    source_address_prefix       = "10.0.2.0/24"
+    destination_address_prefix  = "10.0.0.0/24"
+    resource_group_name         = "${azurerm_resource_group.RSG-BasicLinux.name}"
+    network_security_group_name = "${azurerm_network_security_group.NSG-Subnet-BasicLinuxFrontEnd.name}"
 
+}
 
-
-    }
 
     #Rule for outbound to Internet traffic
 
-    security_rule {
+resource "azurerm_network_security_rule" "FrontEndtoInternet-OK-All" {
 
-    name                       = "OK-FrontEndInternet-Outbound"
-    priority                   = 1400
-    direction                  = "Outbound"
-    access                     = "Allow"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "10.0.0.0/24"
-    destination_address_prefix = "INTERNET"
-  }
+    name                        = "FrontEndtoInternet-OK-All"
+    priority                    = 1103
+    direction                   = "Outbound"
+    access                      = "Allow"
+    protocol                    = "*"
+    source_port_range           = "*"
+    destination_port_range      = "*"
+    source_address_prefix       = "10.0.0.0/24"
+    destination_address_prefix  = "*"
+    resource_group_name         = "${azurerm_resource_group.RSG-BasicLinux.name}"
+    network_security_group_name = "${azurerm_network_security_group.NSG-Subnet-BasicLinuxFrontEnd.name}"
+
 
 }
+
+ # Rule for incoming SSH from Internet
+
+resource "azurerm_network_security_rule" "AlltoFrontEnd-OK-SSHIN" {
+
+    name                        = "BastiontoFrontEnd-OK-SSHIN"
+    priority                    = 1104
+    direction                   = "Inbound"
+    access                      = "Allow"
+    protocol                    = "TCP"
+    source_port_range           = "*"
+    destination_port_range      = "22"
+    source_address_prefix       = "*"
+    destination_address_prefix  = "10.0.0.0/24"
+    resource_group_name         = "${azurerm_resource_group.RSG-BasicLinux.name}"
+    network_security_group_name = "${azurerm_network_security_group.NSG-Subnet-BasicLinuxFrontEnd.name}"
+
+}
+
 # Creating Subnet FrontEnd
 
 resource "azurerm_subnet" "Subnet-BasicLinuxFrontEnd" {
@@ -183,40 +198,47 @@ resource "azurerm_subnet" "Subnet-BasicLinuxFrontEnd" {
 
 }
 
-# Creating NSG for BackEnd
+# Creating NSG for Backend
 
 resource "azurerm_network_security_group" "NSG-Subnet-BasicLinuxBackEnd" {
 
     name = "NSG-Subnet-BasicLinuxBackEnd"
     location = "${var.AzureRegion}"
     resource_group_name = "${azurerm_resource_group.RSG-BasicLinux.name}"
-    
+
+
+}   
     #############################################
     # Rules Section
     #############################################
 
-    # Rule for incoming * from frontend subnet
 
-    security_rule {
+    # Rule for incoming MySQL from internet
 
-    name                       = "OK-all-SubnetFrontEndInbound"
+resource "azurerm_network_security_rule" "AlltoFrontEnd-OK-MySQLIN" {
+
+    name                       = "OK-http-Inbound"
     priority                   = 1100
     direction                  = "Inbound"
     access                     = "Allow"
-    protocol                   = "*"
+    protocol                   = "TCP"
     source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "10.0.0.0/24"
-    destination_address_prefix = "10.0.1.0/24"
-        
-    }
+    destination_port_range     = "3306"
+    source_address_prefix      = "*"
+    destination_address_prefix = "10.0.1.0/24"     
+    resource_group_name         = "${azurerm_resource_group.RSG-BasicLinux.name}"
+    network_security_group_name = "${azurerm_network_security_group.NSG-Subnet-BasicLinuxBackEnd.name}"
+    
+}
+    
+
 
     # Rule for incoming SSH from Bastion
-    
-    security_rule {
 
-    name                       = "OK-SSH-Inbound"
-    priority                   = 1102
+resource "azurerm_network_security_rule" "BastiontoBackEnd-OK-SSHIN" {
+
+    name                       = "BastiontoBackEnd-OK-SSHIN"
+    priority                   = 1101
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "TCP"
@@ -224,59 +246,50 @@ resource "azurerm_network_security_group" "NSG-Subnet-BasicLinuxBackEnd" {
     destination_port_range     = "22"
     source_address_prefix      = "10.0.2.0/24"
     destination_address_prefix = "10.0.1.0/24"
-    }
+    resource_group_name         = "${azurerm_resource_group.RSG-BasicLinux.name}"
+    network_security_group_name = "${azurerm_network_security_group.NSG-Subnet-BasicLinuxBackEnd.name}"
 
-    # Rule for AZure Load Balancer
+}
 
-    security_rule {
-
-    name                       = "OK-AzureLB-Inbound"
-    priority                   = 1103
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "AZURELOADBALANCER"
-    destination_address_prefix = "10.0.1.0/24"
-
-    }
-
-    # Temporary rule for SSH
-    security_rule {
-
-    name                       = "OK-SSHTemp-Inbound"
-    priority                   = 1105
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "tcp"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "AZURELOADBALANCER"
-    destination_address_prefix = "10.0.1.0/24"
-
-    }
 
     #Rule for outbound to Internet traffic
 
-    security_rule {
+resource "azurerm_network_security_rule" "BackEndtoInternet-OK-All" {
 
-    name                       = "OK-BackEndInternet-Outbound"
-    priority                   = 1400
+    name                       = "BackEndtoInternet-OK-All"
+    priority                   = 1102
     direction                  = "Outbound"
     access                     = "Allow"
     protocol                   = "*"
     source_port_range          = "*"
     destination_port_range     = "*"
     source_address_prefix      = "10.0.1.0/24"
-    destination_address_prefix = "INTERNET"
+    destination_address_prefix = "*"
+    resource_group_name         = "${azurerm_resource_group.RSG-BasicLinux.name}"
+    network_security_group_name = "${azurerm_network_security_group.NSG-Subnet-BasicLinuxBackEnd.name}"
 
-    }
+}
+
+ # Rule for incoming SSH from Internet
+
+resource "azurerm_network_security_rule" "AlltoBackEnd-OK-SSHIN" {
+
+    name                       = "AlltoBackEnd-OK-SSHIN"
+    priority                   = 1103
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "TCP"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = "*"
+    destination_address_prefix = "10.0.1.0/24"
+    resource_group_name         = "${azurerm_resource_group.RSG-BasicLinux.name}"
+    network_security_group_name = "${azurerm_network_security_group.NSG-Subnet-BasicLinuxBackEnd.name}"
 
 }
 
 
-# Creating Subnet Bastion
+# Creating Subnet Backend
 
 resource "azurerm_subnet" "Subnet-BasicLinuxBackEnd"{
 
@@ -297,43 +310,46 @@ resource "azurerm_network_security_group" "NSG-Subnet-BasicLinuxBastion" {
     location = "${var.AzureRegion}"
     resource_group_name = "${azurerm_resource_group.RSG-BasicLinux.name}"
 
+}
+
     #############################################
     # Rules Section
     #############################################
 
-    # Rule for incoming SSH from internet
+ # Rule for incoming SSH from Internet
 
-    security_rule {
+resource "azurerm_network_security_rule" "AlltoBastion-OK-SSHIN" {
 
-    name                       = "OK-SSH-Inbound"
-    priority                   = 1100
+    name                       = "AlltoBastion-OK-SSHIN"
+    priority                   = 1101
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "TCP"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = "INTERNET"
+    source_address_prefix      = "*"
     destination_address_prefix = "10.0.2.0/24"
+    resource_group_name         = "${azurerm_resource_group.RSG-BasicLinux.name}"
+    network_security_group_name = "${azurerm_network_security_group.NSG-Subnet-BasicLinuxBastion.name}"
 
-    }
+}
 
-    #Rule for outbound to Internet traffic
+# Rule for outgoing internet traffic
+resource "azurerm_network_security_rule" "BastiontoInternet-OK-All" {
 
-    security_rule {
-
-    name                       = "OK-Subnet2Internet-Outbound"
-    priority                   = 1400
+    name                       = "BastiontoInternet-OK-All"
+    priority                   = 1102
     direction                  = "Outbound"
     access                     = "Allow"
     protocol                   = "*"
     source_port_range          = "*"
     destination_port_range     = "*"
     source_address_prefix      = "10.0.2.0/24"
-    destination_address_prefix = "INTERNET"
-    }
+    destination_address_prefix = "*"
+    resource_group_name         = "${azurerm_resource_group.RSG-BasicLinux.name}"
+    network_security_group_name = "${azurerm_network_security_group.NSG-Subnet-BasicLinuxBastion.name}"
 
 }
-
 
 # Creating Subnet Bastion
 
@@ -695,16 +711,16 @@ resource "azurerm_virtual_machine" "BasicLinuxWebFrontEndVM" {
 
     }
 
-    /*os_profile_linux_config {
+    os_profile_linux_config {
     
     disable_password_authentication = true
 
     ssh_keys {
-      path     = "/home/${var.OCPAdminName}/.ssh/authorized_keys"
-      key_data = "${var.OCPPublicSSHKey}"
+      path     = "/home/${var.VMAdminName}/.ssh/authorized_keys"
+      key_data = "${var.AzurePublicSSHKey}"
     }
 
-    }*/
+    }
 
     tags {
         environment = "${var.TagEnvironment}"
@@ -714,31 +730,9 @@ resource "azurerm_virtual_machine" "BasicLinuxWebFrontEndVM" {
 
 }
 
-# Creating virtual machine extension for Front End
-/*
-resource "azurerm_virtual_machine_extension" "DSCExtension-basicLinuxFrontEnd" {
-  count                = 2
-  name                 = "DSCExtensionFrontEnd"
-  location             = "${var.AzureRegion}"
-  resource_group_name  = "${azurerm_resource_group.RSG-BasicLinux.name}"
-  virtual_machine_name = "BasicLinuxWebFrontEnd${count.index +1}"
-  publisher            = "Microsoft.OSTCExtensions"
-  type                 = "DSCForLinux"
-  type_handler_version = "2.5"
-  depends_on           = ["azurerm_virtual_machine.BasicLinuxWebFrontEndVM"]
-    /*  settings = <<SETTINGS
-    {
-        "fileUris": [ "https://raw.githubusercontent.com/squasta/TerraformAzureRM/master/deploy2.sh" ],
-        "commandToExecute": "bash deploy2.sh"
-    }
-    SETTINGS
-    
-  tags {
-    environment = "${var.TagEnvironment}"
-    usage       = "${var.TagUsage}"
-  }
-}
-*/
+
+
+
 
 # DB BackEnd VMs Creation
 
@@ -789,16 +783,16 @@ resource "azurerm_virtual_machine" "BasicLinuxDBBackEndVM" {
 
     }
 
-    /*os_profile_linux_config {
+    os_profile_linux_config {
     
     disable_password_authentication = true
 
     ssh_keys {
-      path     = "/home/${var.OCPAdminName}/.ssh/authorized_keys"
-      key_data = "${var.OCPPublicSSHKey}"
+      path     = "/home/${var.VMAdminName}/.ssh/authorized_keys"
+      key_data = "${var.AzurePublicSSHKey}"
     }
 
-    }*/
+    }
 
     tags {
         environment = "${var.TagEnvironment}"
@@ -809,32 +803,7 @@ resource "azurerm_virtual_machine" "BasicLinuxDBBackEndVM" {
 }
 
 
-# Creating virtual machine extension for Back End
-/*
-resource "azurerm_virtual_machine_extension" "DSCExtension-basicLinuxBackEnd" {
-  count                = 2
-  name                 = "DSCExtensionBackEnd"
-  location             = "${var.AzureRegion}"
-  resource_group_name  = "${azurerm_resource_group.RSG-BasicLinux.name}"
-  virtual_machine_name = "BasicLinuxDBBackEnd${count.index +1}"
-  publisher            = "Microsoft.OSTCExtensions"
-  type                 = "DSCForLinux"
-  type_handler_version = "2.5"
-  depends_on           = ["azurerm_virtual_machine.BasicLinuxDBBackEndVM"]
 
-    /*  settings = <<SETTINGS
-    {
-        "fileUris": [ "https://raw.githubusercontent.com/squasta/TerraformAzureRM/master/deploy2.sh" ],
-        "commandToExecute": "bash deploy2.sh"
-    }
-    SETTINGS
-    
-  tags {
-    environment = "${var.TagEnvironment}"
-    usage       = "${var.TagUsage}"
-  }
-}
-*/
 
 # Bastion VM Creation
 
@@ -885,16 +854,16 @@ resource "azurerm_virtual_machine" "BasicLinuxBastionVM" {
 
     }
 
-    /*os_profile_linux_config {
+    os_profile_linux_config {
     
     disable_password_authentication = true
 
     ssh_keys {
-      path     = "/home/${var.OCPAdminName}/.ssh/authorized_keys"
-      key_data = "${var.OCPPublicSSHKey}"
+      path     = "/home/${var.VMAdminName}/.ssh/authorized_keys"
+      key_data = "${var.AzurePublicSSHKey}"
     }
 
-    }*/
+    }
 
     tags {
         environment = "${var.TagEnvironment}"
@@ -918,11 +887,39 @@ resource "azurerm_virtual_machine_extension" "CustomExtension-basicLinuxBastion"
   depends_on           = ["azurerm_virtual_machine.BasicLinuxBastionVM"]
 
       settings = <<SETTINGS
-    {
-        "fileUris": [ "https://raw.githubusercontent.com/dfrappart/terraform/master/azure-basiclinux/deployansible.sh" ],
+        {
+        "fileUris": [ "https://raw.githubusercontent.com/dfrappart/Terra-AZBasiclinux/master/deployansible.sh" ],
         "commandToExecute": "bash deployansible.sh"
-    }
-    SETTINGS
+        }
+SETTINGS
+    
+  tags {
+    environment = "${var.TagEnvironment}"
+    usage       = "${var.TagUsage}"
+  }
+}
+
+
+# Creating virtual machine extension for FrontEnd
+
+resource "azurerm_virtual_machine_extension" "CustomExtension-basicLinuxFrontEnd" {
+  
+  count                = 3
+  name                 = "CustomExtensionBastion"
+  location             = "${var.AzureRegion}"
+  resource_group_name  = "${azurerm_resource_group.RSG-BasicLinux.name}"
+  virtual_machine_name = "BasicLinuxWebFrontEnd${count.index +1}"
+  publisher            = "Microsoft.OSTCExtensions"
+  type                 = "CustomScriptForLinux"
+  type_handler_version = "1.5"
+  depends_on           = ["azurerm_virtual_machine.BasicLinuxWebFrontEndVM"]
+
+      settings = <<SETTINGS
+        {   
+        "fileUris": [ "https://raw.githubusercontent.com/dfrappart/Terra-AZBasiclinux/master/installapache.sh" ],
+        "commandToExecute": "bash installapache.sh"
+        }
+SETTINGS
     
   tags {
     environment = "${var.TagEnvironment}"
