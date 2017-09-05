@@ -927,6 +927,33 @@ SETTINGS
   }
 }
 
+# Creating virtual machine extension for Backend
+
+resource "azurerm_virtual_machine_extension" "CustomExtension-basicLinuxBackEnd" {
+  
+  count                = 2
+  name                 = "CustomExtensionBackEnd-${count.index +1}"
+  location             = "${var.AzureRegion}"
+  resource_group_name  = "${azurerm_resource_group.RSG-BasicLinux.name}"
+  virtual_machine_name = "BasicLinuxDBBackEnd${count.index +1}"
+  publisher            = "Microsoft.OSTCExtensions"
+  type                 = "CustomScriptForLinux"
+  type_handler_version = "1.5"
+  depends_on           = ["azurerm_virtual_machine.BasicLinuxDBBackEndVM"]
+
+      settings = <<SETTINGS
+        {   
+        "fileUris": [ "https://raw.githubusercontent.com/dfrappart/Terra-AZBasiclinux/master/installapache.sh" ],
+        "commandToExecute": "bash installmysql.sh"
+        }
+SETTINGS
+    
+  tags {
+    environment = "${var.TagEnvironment}"
+    usage       = "${var.TagUsage}"
+  }
+}
+
 
 #####################################################################################
 # Output
