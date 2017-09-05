@@ -1,9 +1,12 @@
 #!/bin/bash
 
+
 yum -y update
-sudo yum -y install mariadb-server
-sudo systemctl enable mariadb
-sudo systemctl start mariadb
+yum -y install epel-release
+yum repolist
+yum -y update
+yum -y install mariadb-server
+
 
 echo "customscript done" > /tmp/results.txt
 
