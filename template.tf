@@ -943,7 +943,7 @@ resource "azurerm_virtual_machine_extension" "CustomExtension-basicLinuxBackEnd"
 
       settings = <<SETTINGS
         {   
-        "fileUris": [ "https://raw.githubusercontent.com/dfrappart/Terra-AZBasiclinux/master/installapache.sh" ],
+        "fileUris": [ "https://raw.githubusercontent.com/dfrappart/Terra-AZBasiclinux/master/installmysql.sh" ],
         "commandToExecute": "bash installmysql.sh"
         }
 SETTINGS
