@@ -961,18 +961,26 @@ SETTINGS
 
 
 
-output "IP Publique du Bastion" {
+output "Bastion Public IP" {
   value = "${azurerm_public_ip.PublicIP-BastionBasicLinux.ip_address}"
 }
 
-output "FQDN du Bastion" {
+output "Bastion FQDN" {
   value = "${azurerm_public_ip.PublicIP-BastionBasicLinux.fqdn}"
 }
 
-output "IP Publique du Web load balancer" {
+output "Azure LB Public IP" {
   value = "${azurerm_public_ip.PublicIP-FrontEndBasicLinux.ip_address}"
 }
 
-output "FQDN du Web Load Balancer" {
+output "Azure Web LB FQDN " {
   value = "${azurerm_public_ip.PublicIP-FrontEndBasicLinux.fqdn}"
+}
+
+output "DB VM Private IP" {
+  value = ["${azurerm_network_interface.DBBackEndNIC.private_ip_address}"]
+}
+
+output "FE VM Private IP" {
+  value = ["${azurerm_network_interface.WebFrontEndNIC.private_ip_address}"]
 }
