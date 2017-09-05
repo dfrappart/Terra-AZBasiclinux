@@ -1,0 +1,47 @@
+#################################################################
+# Example file for AWS Registration
+# Do not add this file to GIT once completed
+#################################################################
+
+variable "AzureSubscriptionID" {
+  type    = "string"
+  default = ""
+}
+
+variable "AzureClientID" {
+  type    = "string"
+  default = ""
+}
+
+variable "AzureClientSecret" {
+  type    = "string"
+  default = ""
+}
+
+variable "AzureTenantID" {
+  type    = "string"
+  default = ""
+}
+
+
+# Variable defining VM Admin Name
+
+variable "VMAdminName" {
+
+    type    = "string"
+    default = ""
+}
+
+# Variable defining VM Admin password
+
+variable "VMAdminPassword" {
+
+    type    = "string"
+    default = ""
+}
+
+# Variable defining SSH Key
+variable "AzurePublicSSHKey" {
+  type    = "string"
+  default = ""
+}

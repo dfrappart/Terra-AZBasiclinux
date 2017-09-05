@@ -1,0 +1,92 @@
+######################################################
+# Variables for Template
+######################################################
+
+# Variable to define the Azure Region
+
+variable "AzureRegion" {
+
+    type    = "string"
+    default = ""
+}
+
+
+# Variable to define the Tag
+
+variable "TagEnvironment" {
+
+    type    = "string"
+    default = ""
+}
+
+variable "TagUsage" {
+
+    type    = "string"
+    default = ""
+}
+
+# Variable to define the Resource Group Name
+
+variable "RSGName" {
+
+    type    = "string"
+    default = ""
+}
+
+
+# variable defining storage prefix
+#Only lowercase characters, no more than 5
+variable "PrefixforStorageAccount" {
+  type    = "string"
+  default = ""
+}
+
+variable "PrefixforPublicIP" {
+  type    = "string"
+  default = ""
+}
+
+# Variables OS to use : Publisher, Offer, SKU, version
+#Get info with following az command: 
+#az vm image list-publishers -l westeurope
+# az vm image list-offers --output table --publisher RedHat --location "west europe"
+# az vm image list-skus --output table --offer RHEL --publisher REDHAT --location "west europe"
+#Get info with azurerm PS command:
+#Get-AzureRmVMImagePublisher -Location westeurope | ? {$_.publishername -like "*Microsoft*"}
+#Get-AzureRmVMImageOffer -Location westeurope -PublisherName MicrosoftWindowsServer
+#Get-AzureRmVMImageSku -Location westeurope -PublisherName MicrosoftWindowsServer -Offer WindowsServer
+
+variable "OSPublisher" {
+  type    = "string"
+  #default = "MicrosoftWindowsServer"
+  default = "Openlogic"
+  #default = "Canonical"
+}
+
+variable "OSOffer" {
+  type    = "string"
+  #default = "WindowsServer"
+  default = "CentOS"
+  #default = "UbuntuServer"
+}
+
+variable "OSsku" {
+  type    = "string"
+  #default = "2016-Datacenter"
+  default = "7.3"
+  #default = "16.04-LTS"
+}
+
+variable "OSversion" {
+  type    = "string"
+  default = "latest"
+}
+
+#variable defining VM size
+variable "VMSize" {
+  type    = "string"
+  default = "Standard_F1S"
+}
+
+
+
