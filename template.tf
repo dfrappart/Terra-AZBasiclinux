@@ -978,9 +978,11 @@ output "Azure Web LB FQDN " {
 }
 
 output "DB VM Private IP" {
-  value = ["${azurerm_network_interface.DBBackEndNIC.private_ip_address}"]
+  value = ["${element(azurerm_network_interface.DBBackEndNIC.*.private_ip_address, 1)}","${element(azurerm_network_interface.DBBackEndNIC.*.private_ip_address, 2)}"]
 }
 
 output "FE VM Private IP" {
-  value = ["${azurerm_network_interface.WebFrontEndNIC.private_ip_address}"]
+    
+    value = ["${element(azurerm_network_interface.WebFrontEndNIC.*.private_ip_address, 1)}","${element(azurerm_network_interface.WebFrontEndNIC.*.private_ip_address, 2)}","${element(azurerm_network_interface.WebFrontEndNIC.*.private_ip_address, 3)}"]
 }
+
