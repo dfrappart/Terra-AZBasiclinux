@@ -985,4 +985,3 @@ output "FE VM Private IP" {
     
     value = ["${element(azurerm_network_interface.WebFrontEndNIC.*.private_ip_address, 1)}","${element(azurerm_network_interface.WebFrontEndNIC.*.private_ip_address, 2)}","${element(azurerm_network_interface.WebFrontEndNIC.*.private_ip_address, 3)}"]
 }
-
