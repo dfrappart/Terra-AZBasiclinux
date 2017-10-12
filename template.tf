@@ -371,13 +371,25 @@ resource "azurerm_subnet" "Subnet-BasicLinuxBastion" {
 
 # Creating Public IP for Load Balancer on FrontEnd
 
+resource "random_string" "PublicIPfqdnprefixFE" {
+
+    keepers {
+        ip_id = "${var.VMcount}"
+    }
+
+    length = 5
+    special = false
+    upper = false
+    number = false
+}
+
 resource "azurerm_public_ip" "PublicIP-FrontEndBasicLinux" {
 
     name                            = "PublicIP-FrontEndBasicLinux"
     location                        = "${var.AzureRegion}"
     resource_group_name             = "${azurerm_resource_group.RSG-BasicLinux.name}"
     public_ip_address_allocation    = "static"
-    domain_name_label               = "${var.PrefixforPublicIP}dvtweb"
+    domain_name_label               = "${random_string.PublicIPfqdnprefixFE.result}dvtweb"
 
     tags {
     environment = "${var.TagEnvironment}"
@@ -388,13 +400,25 @@ resource "azurerm_public_ip" "PublicIP-FrontEndBasicLinux" {
 
 # Creating Public IP for Bastion
 
+resource "random_string" "PublicIPfqdnprefixBastion" {
+
+    keepers {
+        ip_id = "${var.VMcount}"
+    }
+
+    length = 5
+    special = false
+    upper = false
+    number = false
+}
+
 resource "azurerm_public_ip" "PublicIP-BastionBasicLinux" {
 
     name                            = "PublicIP-BastionBasicLinux"
     location                        = "${var.AzureRegion}"
     resource_group_name             = "${azurerm_resource_group.RSG-BasicLinux.name}"
     public_ip_address_allocation    = "static"
-    domain_name_label               = "${var.PrefixforPublicIP}dvtbastion"
+    domain_name_label               = "${random_string.PublicIPfqdnprefixBastion.result}dvtbastion"
     
     tags {
     environment = "${var.TagEnvironment}"
