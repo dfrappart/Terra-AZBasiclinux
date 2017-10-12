@@ -373,9 +373,7 @@ resource "azurerm_subnet" "Subnet-BasicLinuxBastion" {
 
 resource "random_string" "PublicIPfqdnprefixFE" {
 
-    keepers {
-        ip_id = "${var.VMcount}"
-    }
+    
 
     length = 5
     special = false
@@ -402,9 +400,7 @@ resource "azurerm_public_ip" "PublicIP-FrontEndBasicLinux" {
 
 resource "random_string" "PublicIPfqdnprefixBastion" {
 
-    keepers {
-        ip_id = "${var.VMcount}"
-    }
+
 
     length = 5
     special = false
