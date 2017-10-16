@@ -982,22 +982,27 @@ SETTINGS
 
 
 output "Bastion Public IP" {
+
   value = "${azurerm_public_ip.PublicIP-BastionBasicLinux.ip_address}"
 }
 
 output "Bastion FQDN" {
+
   value = "${azurerm_public_ip.PublicIP-BastionBasicLinux.fqdn}"
 }
 
 output "Azure LB Public IP" {
+
   value = "${azurerm_public_ip.PublicIP-FrontEndBasicLinux.ip_address}"
 }
 
 output "Azure Web LB FQDN " {
+
   value = "${azurerm_public_ip.PublicIP-FrontEndBasicLinux.fqdn}"
 }
 
 output "DB VM Private IP" {
+    
   value = ["${element(azurerm_network_interface.DBBackEndNIC.*.private_ip_address, 1)}","${element(azurerm_network_interface.DBBackEndNIC.*.private_ip_address, 2)}"]
 }
 
