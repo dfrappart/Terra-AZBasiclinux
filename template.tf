@@ -976,6 +976,90 @@ SETTINGS
 }
 
 
+# Creating virtual machine Network watcher extension for Bastion
+
+resource "azurerm_virtual_machine_extension" "Bastion-NetworkWatcherAgent" {
+  
+
+  count                = 1
+  name                 = "NetworkWatcherAgent-Bastion${count.index+1}"
+  location             = "${var.AzureRegion}"
+  resource_group_name  = "${azurerm_resource_group.RSG-BasicLinux.name}"
+  virtual_machine_name = "${element(azurerm_virtual_machine.BasicLinuxBastionVM.*.name,count.index)}"
+  publisher            = "microsoft.azure.networkwatcher"
+  type                 = "NetworkWatcherAgentLinux"
+  type_handler_version = "1.4"
+
+      settings = <<SETTINGS
+        {   
+        
+        "commandToExecute": ""
+        }
+SETTINGS
+    
+  tags {
+    environment = "${var.TagEnvironment}"
+    usage       = "${var.TagUsage}"
+  }
+}
+
+
+# Creating virtual machine Network watcher extension for FrontEnd
+
+resource "azurerm_virtual_machine_extension" "FE-NetworkWatcherAgent" {
+  
+
+  count                = 3
+  name                 = "NetworkWatcherAgent-Frontend${count.index+1}"
+  location             = "${var.AzureRegion}"
+  resource_group_name  = "${azurerm_resource_group.RSG-BasicLinux.name}"
+  virtual_machine_name = "${element(azurerm_virtual_machine.BasicLinuxWebFrontEndVM.*.name,count.index)}"
+  publisher            = "microsoft.azure.networkwatcher"
+  type                 = "NetworkWatcherAgentLinux"
+  type_handler_version = "1.4"
+
+      settings = <<SETTINGS
+        {   
+        
+        "commandToExecute": ""
+        }
+SETTINGS
+    
+  tags {
+    environment = "${var.TagEnvironment}"
+    usage       = "${var.TagUsage}"
+  }
+}
+
+# Creating virtual machine Network watcher extension for Backend
+
+resource "azurerm_virtual_machine_extension" "BE-NetworkWatcherAgent" {
+  
+
+  count                = 2
+  name                 = "NetworkWatcherAgent-Backend${count.index+1}"
+  location             = "${var.AzureRegion}"
+  resource_group_name  = "${azurerm_resource_group.RSG-BasicLinux.name}"
+  virtual_machine_name = "${element(azurerm_virtual_machine.BasicLinuxDBBackEndVM.*.name,count.index)}"
+  publisher            = "microsoft.azure.networkwatcher"
+  type                 = "NetworkWatcherAgentLinux"
+  type_handler_version = "1.4"
+
+      settings = <<SETTINGS
+        {   
+        
+        "commandToExecute": ""
+        }
+SETTINGS
+    
+  tags {
+    environment = "${var.TagEnvironment}"
+    usage       = "${var.TagUsage}"
+  }
+}
+
+
+
 #####################################################################################
 # Output
 #####################################################################################
