@@ -168,7 +168,7 @@ resource "azurerm_network_security_rule" "FrontEndtoInternet-OK-All" {
 }
 
  # Rule for incoming SSH from Internet
-
+/*
 resource "azurerm_network_security_rule" "AlltoFrontEnd-OK-SSHIN" {
 
     name                        = "BastiontoFrontEnd-OK-SSHIN"
@@ -184,6 +184,7 @@ resource "azurerm_network_security_rule" "AlltoFrontEnd-OK-SSHIN" {
     network_security_group_name = "${azurerm_network_security_group.NSG-Subnet-BasicLinuxFrontEnd.name}"
 
 }
+*/
 
 # Creating Subnet FrontEnd
 
@@ -213,7 +214,7 @@ resource "azurerm_network_security_group" "NSG-Subnet-BasicLinuxBackEnd" {
     #############################################
 
 
-    # Rule for incoming MySQL from internet
+    # Rule for incoming MySQL from FE
 
 resource "azurerm_network_security_rule" "AlltoFrontEnd-OK-MySQLIN" {
 
