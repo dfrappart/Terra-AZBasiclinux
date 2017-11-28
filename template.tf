@@ -464,12 +464,12 @@ resource "azurerm_lb_backend_address_pool" "LB-WebFRontEndBackEndPool" {
 
 # Creating Health Probe
 
-resource "azurerm_lb_probe" "LB-WebFrontEnd-sshprobe" {
+resource "azurerm_lb_probe" "LB-WebFrontEnd-httpprobe" {
 
-    name                = "LB-WebFrontEnd-sshprobe"
+    name                = "LB-WebFrontEnd-httpprobe"
     resource_group_name = "${azurerm_resource_group.RSG-BasicLinux.name}"
     loadbalancer_id     = "${azurerm_lb.LB-WebFrontEndBasicLinux.id}"
-    port                = 22
+    port                = 80
 
 
 }
@@ -482,7 +482,7 @@ resource "azurerm_lb_rule" "LB-WebFrondEndrule" {
     resource_group_name             = "${azurerm_resource_group.RSG-BasicLinux.name}"
     loadbalancer_id                 = "${azurerm_lb.LB-WebFrontEndBasicLinux.id}"
     protocol                        = "tcp"
-    probe_id                        = "${azurerm_lb_probe.LB-WebFrontEnd-sshprobe.id}"
+    probe_id                        = "${azurerm_lb_probe.LB-WebFrontEnd-httpprobe.id}"
     frontend_port                   = 80
     #frontend_ip_configuration_name  = "${azurerm_public_ip.PublicIP-FrontEndBasicLinux.name}"
     frontend_ip_configuration_name = "weblbbasiclinux"
