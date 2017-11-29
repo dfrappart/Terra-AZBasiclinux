@@ -484,7 +484,6 @@ resource "azurerm_lb_rule" "LB-WebFrondEndrule" {
     protocol                        = "tcp"
     probe_id                        = "${azurerm_lb_probe.LB-WebFrontEnd-httpprobe.id}"
     frontend_port                   = 80
-    #frontend_ip_configuration_name  = "${azurerm_public_ip.PublicIP-FrontEndBasicLinux.name}"
     frontend_ip_configuration_name = "weblbbasiclinux"
     backend_port                    = 80
     backend_address_pool_id         = "${azurerm_lb_backend_address_pool.LB-WebFRontEndBackEndPool.id}"
@@ -1094,4 +1093,15 @@ output "DB VM Private IP" {
 output "FE VM Private IP" {
     
     value = ["${element(azurerm_network_interface.WebFrontEndNIC.*.private_ip_address, 1)}","${element(azurerm_network_interface.WebFrontEndNIC.*.private_ip_address, 2)}","${element(azurerm_network_interface.WebFrontEndNIC.*.private_ip_address, 3)}"]
+}
+
+
+output "Web Load Balancer FE IP Config Name" {
+
+    value = "${azurerm_lb.LB-WebFrontEndBasicLinux.frontend_ip_configuration}"
+}
+
+output "Web Load Balancer FE IP Config Name details" {
+
+    value = "${azurerm_lb.LB-WebFrontEndBasicLinux.frontend_ip_configuration.name}"
 }
