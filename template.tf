@@ -985,7 +985,7 @@ resource "azurerm_virtual_machine_extension" "Bastion-NetworkWatcherAgent" {
   location             = "${var.AzureRegion}"
   resource_group_name  = "${azurerm_resource_group.RSG-BasicLinux.name}"
   virtual_machine_name = "${element(azurerm_virtual_machine.BasicLinuxBastionVM.*.name,count.index)}"
-  publisher            = "microsoft.azure.networkwatcher"
+  publisher            = "Microsoft.Azure.NetworkWatcher"
   type                 = "NetworkWatcherAgentLinux"
   type_handler_version = "1.4"
 
@@ -1013,7 +1013,7 @@ resource "azurerm_virtual_machine_extension" "FE-NetworkWatcherAgent" {
   location             = "${var.AzureRegion}"
   resource_group_name  = "${azurerm_resource_group.RSG-BasicLinux.name}"
   virtual_machine_name = "${element(azurerm_virtual_machine.BasicLinuxWebFrontEndVM.*.name,count.index)}"
-  publisher            = "microsoft.azure.networkwatcher"
+  publisher            = "Microsoft.Azure.NetworkWatcher"
   type                 = "NetworkWatcherAgentLinux"
   type_handler_version = "1.4"
 
@@ -1040,7 +1040,7 @@ resource "azurerm_virtual_machine_extension" "BE-NetworkWatcherAgent" {
   location             = "${var.AzureRegion}"
   resource_group_name  = "${azurerm_resource_group.RSG-BasicLinux.name}"
   virtual_machine_name = "${element(azurerm_virtual_machine.BasicLinuxDBBackEndVM.*.name,count.index)}"
-  publisher            = "microsoft.azure.networkwatcher"
+  publisher            = "Microsoft.Azure.NetworkWatcher"
   type                 = "NetworkWatcherAgentLinux"
   type_handler_version = "1.4"
 
@@ -1101,7 +1101,3 @@ output "Web Load Balancer FE IP Config Name" {
     value = "${azurerm_lb.LB-WebFrontEndBasicLinux.frontend_ip_configuration}"
 }
 
-output "Web Load Balancer FE IP Config Name details" {
-
-    value = "${azurerm_lb.LB-WebFrontEndBasicLinux.frontend_ip_configuration.name}"
-}
