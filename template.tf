@@ -901,9 +901,9 @@ resource "azurerm_virtual_machine_extension" "CustomExtension-basicLinuxBastion"
   location             = "${var.AzureRegion}"
   resource_group_name  = "${azurerm_resource_group.RSG-BasicLinux.name}"
   virtual_machine_name = "BasicLinuxBastion${count.index +1}"
-  publisher            = "Microsoft.OSTCExtensions"
-  type                 = "CustomScriptForLinux"
-  type_handler_version = "1.5"
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.0"
   depends_on           = ["azurerm_virtual_machine.BasicLinuxBastionVM"]
 
       settings = <<SETTINGS
