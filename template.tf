@@ -56,7 +56,7 @@ resource "azurerm_resource_group" "RSG-BasicLinux" {
     environment = "${var.TagEnvironment}"
     usage       = "${var.TagUsage}"
     }
-    }
+}
 
 # Creating vNET
 
